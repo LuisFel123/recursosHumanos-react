@@ -1,8 +1,13 @@
 import axios from 'axios';
-import React, { useState } from 'react'
-import { useNavigate, useSearchParams } from 'react-router-dom'
+import React, { useEffect, useState } from 'react'
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
 
 export default function EditarEmpleado() {
+
+  const urlBase = "http://localhost:8080/api/empleados";
+
+
+  const { id } = useParams();
 
   const [empleado, setEmpleado] = useState({
     nombre: '',
@@ -14,16 +19,27 @@ export default function EditarEmpleado() {
   const { nombre, departamento, sueldo } = empleado;
 
 
+  useEffect(() => {
+    cargarEmpleado();
+  }, []);
+
+
+  const cargarEmpleado= async()=>{
+    const resultado=await axios.get(`${urlBase}/${id}`);
+    setEmpleado(resultado.data);
+  }
+
+
   const onInputChange = (e) => {
     setEmpleado({ ...empleado, [e.target.name]: e.target.value });
   }
 
-  let navegacion=useNavigate();
+  let navegacion = useNavigate();
 
   const onSummit = async (e) => {
     e.preventDefault();
     const urlBase = "http://localhost:8080/api/empleados";
-    await axios.post(urlBase, empleado);
+    //await axios.post(urlBase, empleado);
     //redirigimos a la pagina de inicio
     navegacion("/");
   }
@@ -48,14 +64,14 @@ export default function EditarEmpleado() {
 
         <div className="mb-3">
           <label htmlFor="departamento" className="form-label">Departamento</label>
-          <input type="text" className="form-control" id="departamento" name='departamento' value={departamento}  required  onChange={(e) => onInputChange(e)} />
+          <input type="text" className="form-control" id="departamento" name='departamento' value={departamento} required onChange={(e) => onInputChange(e)} />
 
         </div>
 
 
         <div className="mb-3">
           <label htmlFor="sueldo" className="form-label">Sueldo</label>
-          <input type="number" step="any" className="form-control" id="sueldo" name='sueldo' value={sueldo} required  onChange={(e) => onInputChange(e)} />
+          <input type="number" step="any" className="form-control" id="sueldo" name='sueldo' value={sueldo} required onChange={(e) => onInputChange(e)} />
 
         </div>
 
