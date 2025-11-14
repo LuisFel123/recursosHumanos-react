@@ -39,6 +39,7 @@ export default function EditarEmpleado() {
   const onSummit = async (e) => {
     e.preventDefault();
     const urlBase = "http://localhost:8080/api/empleados";
+    await axios.put(`${urlBase}/${id}`, empleado);
     //await axios.post(urlBase, empleado);
     //redirigimos a la pagina de inicio
     navegacion("/");

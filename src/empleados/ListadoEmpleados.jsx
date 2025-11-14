@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import axios from 'axios';
 import { NumericFormat } from 'react-number-format';
 import { Link } from 'react-router-dom';
+import { Button } from 'react-bootstrap';
 
 
 export default function ListadoEmpleados() {
@@ -21,6 +22,16 @@ export default function ListadoEmpleados() {
             setEmpleados(reponse.data);
         } catch (error) {
             console.log("Error al cargar empleados: ", error);
+        }
+    }
+
+    const eliminarEmpleado = async (idEmpleado) => {
+        try {
+            await axios.delete(`${urlBase}/${idEmpleado}`);
+            cargarEmpleados();
+            alert("Empleado eliminado correctamente");
+        } catch (error) {
+            console.log("Error al eliminar empleado: ", error);
         }
     }
 
@@ -60,6 +71,13 @@ export default function ListadoEmpleados() {
                                         <div>
                                             <Link to={`/editar/${empleado.idEmpleado}`} className='btn btn-warning btn-sm me-3'>Editar</Link>
                                         </div>
+
+
+                                        <div>
+                                            <Button onClick={()=>eliminarEmpleado(empleado.idEmpleado)} className="btn-danger btn-sm me-3">Eliminar</Button>
+                                        </div>
+
+
                                     </td>
                                 </tr>
                             ))
